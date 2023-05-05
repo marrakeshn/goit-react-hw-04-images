@@ -2,7 +2,6 @@ import { MagnifyingGlass } from 'react-loader-spinner';
 import { ContainerLoader } from './Loader.styled';
 
 export const Loader = () => {
-  return (
     <ContainerLoader>
       <MagnifyingGlass
         height="320"
@@ -20,5 +19,4 @@ export const Loader = () => {
         visible={true}
       />
     </ContainerLoader>
-  );
 };

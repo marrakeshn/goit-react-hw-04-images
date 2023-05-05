@@ -2,8 +2,6 @@ import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import PropTypes from 'prop-types';
 
 export const ImageGallery = ({ gallery, onOpenModal }) => {
-  
-  return (
     <ul className="ImageGallery ">
       {gallery.map(({ id, tags, webformatURL, largeImageURL }) => (
         <ImageGalleryItem
@@ -15,7 +13,6 @@ export const ImageGallery = ({ gallery, onOpenModal }) => {
         />
       ))}
     </ul>
-  );
 };
 
 ImageGallery.propTypes = {

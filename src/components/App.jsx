@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import { getImages } from 'service/pixabay_api';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
@@ -9,87 +9,83 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Modal } from './Modal/Modal';
 
-export class App extends Component {
-  state = {
-    images: [],
-    query: '',
-    page: 1,
-    isLoading: false,
-    showModal: false,
-    largeImage: '',
-    tags: '',
-    total: 0,
-    error: null,
-  };
+export function App() {
+  const [images, setImages] = useState([]);
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [largeImage, setLargeImage] = useState('');
+  const [tags, setTags] = useState('');
+  const [total, setTotal] = useState(0);
+  const [error, setError] = useState(null);
 
-  componentDidUpdate(_, prevState) {
-    const { query, page } = this.state;
-    if (prevState.query !== query || prevState.page !== page) {
-      this.fetchImages(query, page);
+  useEffect(() => {
+   if (query !== '') {
+      fetchImages(query, page);
     }
-  }
+  }, [page, query]);
 
-  fetchImages = async (query, page) => {
+  const fetchImages = async (query, page) => {
     try {
-      this.setState({ isLoading: true });
+      setIsLoading(true);
       const data = await getImages(query, page);
       if (data.hits.length === 0) {
         return toast.error(
           "We didn't find anything for this search :(  Try another option"
         );
       }
-      this.setState(({ images }) => ({
-        images: [...images, ...data.hits],
-        total: data.totalHits,
-      }));
+
+      setTotal(data.totalHits);
+      setImages(prev => [...prev, ...data.hits]);
     } catch (error) {
-      this.setState({ error });
+      setError(error);
     } finally {
-      this.setState({ isLoading: false });
+      setIsLoading(false);
     }
   };
 
-  handlaSubmit = query => {
-    this.setState({ query, page: 1, images: [] });
+  const handleSubmit = query => {
+    setQuery(query);
+    setPage(1);
+    setImages([]);
   };
 
-  onLoadMore = () => {
-    this.setState(prev => ({ page: prev.page + 1 }));
+  const onLoadMore = () => {
+    setPage(prev => prev + 1);
   };
 
-  onOpenModal = (largeImage, tags) => {
-    this.setState({ showModal: true, largeImage, tags });
+  const onOpenModal = (largeImage, tags) => {
+    setShowModal(true);
+    setLargeImage(largeImage);
+    setTags(tags);
   };
 
-  onCloseModal = () => {
-    this.setState({ showModal: false, largeImage: '', tags: '' });
+  const onCloseModal = () => {
+    setShowModal(false);
+    setLargeImage('');
+    setTags('');
   };
 
-  render() {
-    const { images, isLoading, total, error, showModal, largeImage, tags } =
-      this.state;
-    const totalPage = total / images.length;
+  const totalPage = total / images.length;
     return (
       <AppContainer>
-        <Searchbar onSubmit={this.handlaSubmit} />
+        <Searchbar onSubmit={handleSubmit} />
         {images.length === 0 && (
-          <StartText>
-            {' '}
-            Enter a query on the topic you are interested in
-          </StartText>
+          <StartText>Enter a query on the topic you are interested in</StartText>
         )}
         {isLoading && <Loader />}
         {images.length !== 0 && (
-          <ImageGallery gallery={images} onOpenModal={this.onOpenModal} />
+          <ImageGallery gallery={images} onOpenModal={onOpenModal} />
         )}
         {totalPage > 1 && !isLoading && images.length !== 0 && (
-          <Button onClick={this.onLoadMore} />
+          <Button onClick={onLoadMore} />
         )}
         {showModal && (
           <Modal
             largeImage={largeImage}
             tags={tags}
-            onCloseModal={this.onCloseModal}
+            onCloseModal={onCloseModal}
           />
         )}
         {error && (
@@ -101,5 +97,4 @@ export class App extends Component {
         <ToastContainer autoClose={2000} theme="dark" />
       </AppContainer>
     );
-  }
 }

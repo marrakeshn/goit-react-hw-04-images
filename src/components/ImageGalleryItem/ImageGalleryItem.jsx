@@ -6,13 +6,11 @@ export const ImageGalleryItem = ({
   largeImageURL,
   onOpenModal,
 }) => {
-  return (
     <li className="ImageGalleryItem">
       <div onClick={() => onOpenModal(largeImageURL, tags)}>
         <img className="ImageGalleryItem-image" src={webformatURL} alt={tags} />
       </div>
     </li>
-  );
 };
 
 ImageGalleryItem.propTypes = {
