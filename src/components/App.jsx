@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getImages } from 'service/pixabay_api';
-import { Searchbar } from './Searchbar/Searchbar';
+import { Searchbar } from './Searchbar/Sarchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
 import { AppContainer, StartText, ErrorText } from './App.styled';
@@ -21,7 +21,7 @@ export function App() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-   if (query !== '') {
+    if (query !== '') {
       fetchImages(query, page);
     }
   }, [page, query]);
@@ -45,7 +45,7 @@ export function App() {
     }
   };
 
-  const handleSubmit = query => {
+  const renderSubmit = query => {
     setQuery(query);
     setPage(1);
     setImages([]);
@@ -68,33 +68,33 @@ export function App() {
   };
 
   const totalPage = total / images.length;
-    return (
-      <AppContainer>
-        <Searchbar onSubmit={handleSubmit} />
-        {images.length === 0 && (
-          <StartText>Enter a query on the topic you are interested in</StartText>
-        )}
-        {isLoading && <Loader />}
-        {images.length !== 0 && (
-          <ImageGallery gallery={images} onOpenModal={onOpenModal} />
-        )}
-        {totalPage > 1 && !isLoading && images.length !== 0 && (
-          <Button onClick={onLoadMore} />
-        )}
-        {showModal && (
-          <Modal
-            largeImage={largeImage}
-            tags={tags}
-            onCloseModal={onCloseModal}
-          />
-        )}
-        {error && (
-          <ErrorText>
-            We didn't find anything for this search :(
-            <span>Try another option</span>
-          </ErrorText>
-        )}
-        <ToastContainer autoClose={2000} theme="dark" />
-      </AppContainer>
-    );
+  return (
+    <AppContainer>
+      <Searchbar onSubmit={renderSubmit} />
+      {images.length === 0 && (
+        <StartText>Enter a query on the topic you are interested in</StartText>
+      )}
+      {isLoading && <Loader />}
+      {images.length !== 0 && (
+        <ImageGallery gallery={images} onOpenModal={onOpenModal} />
+      )}
+      {totalPage > 1 && !isLoading && images.length !== 0 && (
+        <Button onClick={onLoadMore} />
+      )}
+      {showModal && (
+        <Modal
+          largeImage={largeImage}
+          tags={tags}
+          onCloseModal={onCloseModal}
+        />
+      )}
+      {error && (
+        <ErrorText>
+          We didn't find anything for this search :(
+          <span>Try another option</span>
+        </ErrorText>
+      )}
+      <ToastContainer autoClose={2000} theme="dark" />
+    </AppContainer>
+  );
 }

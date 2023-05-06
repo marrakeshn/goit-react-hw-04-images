@@ -6,14 +6,15 @@ const modalRoot = document.querySelector('#modal-root');
 
 export function Modal({ onCloseModal, largeImage, tags }) {
   useEffect(() => {
-    function handleCloseESC(e) {
+    function handleCloseECC(e) {
       if (e.key === 'Escape') {
         onCloseModal();
       }
     }
-    window.addEventListener('keydown', handleCloseESC);
 
-    return () => window.removeEventListener('keydown', handleCloseESC);
+    window.addEventListener('keydown', handleCloseECC);
+
+    return () => window.removeEventListener('keydown', handleCloseECC);
   }, [onCloseModal]);
 
   function handleCloseBackdrop(e) {
@@ -31,7 +32,6 @@ export function Modal({ onCloseModal, largeImage, tags }) {
     modalRoot
   );
 }
-
 
 Modal.propTypes = {
   onCloseModal: PropTypes.func.isRequired,

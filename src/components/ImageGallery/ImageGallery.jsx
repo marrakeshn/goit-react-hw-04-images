@@ -1,19 +1,19 @@
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import PropTypes from 'prop-types';
 
-export const ImageGallery = ({ gallery, onOpenModal }) => {
-    <ul className="ImageGallery ">
-      {gallery.map(({ id, tags, webformatURL, largeImageURL }) => (
-        <ImageGalleryItem
-          key={id}
-          webformatURL={webformatURL}
-          tags={tags}
-          largeImageURL={largeImageURL}
-          onOpenModal={onOpenModal}
-        />
-      ))}
-    </ul>
-};
+export const ImageGallery = ({ gallery, onOpenModal }) => (
+  <ul className="ImageGallery ">
+    {gallery.map(({ id, tags, webformatURL, largeImageURL }) => (
+      <ImageGalleryItem
+        key={id}
+        webformatURL={webformatURL}
+        tags={tags}
+        largeImageURL={largeImageURL}
+        onOpenModal={onOpenModal}
+      />
+    ))}
+  </ul>
+);
 
 ImageGallery.propTypes = {
   gallery: PropTypes.arrayOf(
